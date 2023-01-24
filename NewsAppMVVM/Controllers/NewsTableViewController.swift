@@ -37,6 +37,9 @@ class NewsTableViewController: UITableViewController {
             .subscribe(onNext: { articleResponse in
                 let articles = articleResponse.articles
                 self.articleListVM = ArticleListViewModel(articles)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }).disposed(by: disposeBag)
     }
     
@@ -62,7 +65,7 @@ class NewsTableViewController: UITableViewController {
         articleVM.title.asDriver(onErrorJustReturn: "")
             .drive(cell.titleLabel.rx.text)
             .disposed(by: disposeBag)
-        let articleVM = self.articleListVM.articleAt(indexPath.row)
+        
         articleVM.description.asDriver(onErrorJustReturn: "")
             .drive(cell.descriptionLabel.rx.text)
             .disposed(by: disposeBag)
